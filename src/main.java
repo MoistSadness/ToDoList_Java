@@ -59,11 +59,19 @@ public class main {
 
         return newTodo;
     }
-    static void removeTodo(){
+    static void removeTodo(ArrayList<Todo> TODO){
         System.out.println("2");
+        // Ask user what todo they would like to remove
+        // Confirm user choice
+        // Adjust user choice for index
+        // Remove the todo from arraylist
     }
-    static void updateTodo(){
+    static void updateTodo(ArrayList<Todo> TODO){
         System.out.println("3");
+        // Ask user what todo they would like to update
+        // Adjust user choice for index
+        // Create new todo
+        // Place new todo in the desired index
     }
     /*
      * Prints todos with nice formatting
@@ -114,10 +122,10 @@ public class main {
                     TODO.add(newTodo);              // Add todo to the arraylist
                     break;
                 case "2":
-                    removeTodo();
+                    removeTodo(TODO);
                     break;
                 case "3":
-                    updateTodo();
+                    updateTodo(TODO);
                     break;
                 case "4":
                     displayTodos(TODO);
