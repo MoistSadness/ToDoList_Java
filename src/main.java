@@ -1,10 +1,96 @@
 import java.awt.*;
+import java.lang.reflect.Array;
+import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class main {
+
+    static void readFromFile(){}
+    static void writeToFile(){}
+
+    static String userInputString(){
+        Scanner input = new Scanner(System.in);     // Create a scanner object for user input
+        return input.nextLine();
+    }
+
+    static int userInputInt(){
+        int userInput;
+        while(true) {
+            try {
+                Scanner input = new Scanner(System.in);
+                userInput = input.nextInt();
+                break;
+            }
+            catch(InputMismatchException | NumberFormatException ex ) {
+                System.out.println("Invalid Number, Please try again");
+            }
+        }
+        return userInput;
+    }
+
+    static void sortByDaysLeft(){}
+
+
+    /*
+    * Creates a Todo object and populates it with data
+    * Returns the Todo object
+    */
+    static Todo createTodo(){
+        //System.out.println("1");
+        System.out.println("Creating a new todo");
+
+        Todo newTodo = new Todo();      // Creates new Todo object
+
+        System.out.println("Please enter a title");
+        newTodo.title = userInputString();
+
+        System.out.println("Please enter a description");
+        newTodo.description = userInputString();
+
+        System.out.println("Please enter the completion month");
+        newTodo.month = userInputInt();
+
+        System.out.println("Please enter the completion day");
+        newTodo.day = userInputInt();
+
+        System.out.println("Please enter the completion year");
+        newTodo.year = userInputInt();
+
+        return newTodo;
+    }
+    static void removeTodo(){
+        System.out.println("2");
+    }
+    static void updateTodo(){
+        System.out.println("3");
+    }
+    /*
+     * Prints todos with nice formatting
+     */
+    static void displayTodos(ArrayList<Todo> TODO){
+        //System.out.println("4");
+        for (int i = 0; i < TODO.size(); i++){
+            System.out.println("###");
+            System.out.println("#" + i + "#");
+            System.out.println("###");
+
+            // Getting the todo object
+            TODO.get(i).print();
+        }
+    }
+
+
     public static void main(String[] args){
+        // Read data from file
+
+        // Update all the daysLeft attributes for each todo
+
         System.out.println("");
         System.out.println("Welcome to the To Do list:");
+
+        // Creating arraylist to store todo objects
+        ArrayList<Todo> TODO = new ArrayList<Todo>();
 
         Scanner userInput = new Scanner(System.in);     // Create a scanner object for user input
 
@@ -18,21 +104,23 @@ public class main {
             System.out.println("\t3. Update todo");
             System.out.println("\t4. Display todos");
             System.out.println("\t5. Exit");
-
+            System.out.println("");
             String choice = userInput.nextLine();
 
             switch(choice){
                 case "1":
-                    System.out.println("1");
+                    Todo newTodo = createTodo();    // Create a todo
+                    //newTodo.printTodo();
+                    TODO.add(newTodo);              // Add todo to the arraylist
                     break;
                 case "2":
-                    System.out.println("2");
+                    removeTodo();
                     break;
                 case "3":
-                    System.out.println("3");
+                    updateTodo();
                     break;
                 case "4":
-                    System.out.println("4");
+                    displayTodos(TODO);
                     break;
                 case "5":
                     System.out.println("Exiting program");
@@ -41,6 +129,8 @@ public class main {
                 default:
                     System.out.println("Please enter a valid choice");
             }
+            // Sort the todos by the number of days left
+            // Save data to file
         }
 
     }
