@@ -1,13 +1,57 @@
 import java.awt.*;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
+
+//      Libraries for file IO
+
 
 public class main {
+    static void readFromFile(ArrayList<Todo> TODO){
+        try{
+            // Create stream input objects
+            FileInputStream f = new FileInputStream("data.txt");
+            ObjectInputStream o = new ObjectInputStream(f);
+            TODO = (ArrayList<Todo>) o.readObject();
 
-    static void readFromFile(){}
-    static void writeToFile(){}
+            o.close();
+            f.close();
+
+        }catch (Exception FileNotFoundException){
+            System.out.println("File doesn't exist'");
+        }
+
+    }
+
+    static void writeToFile(ArrayList<Todo> TODO){
+        try {
+            // Creating output stream objects
+            FileOutputStream f = new FileOutputStream(new File("data.txt"));
+            ObjectOutputStream o = new ObjectOutputStream(f);
+
+            // Iterate through the arraylist and write every object to file
+            for(int i = 0; i < TODO.size(); i++){
+                o.writeObject(TODO.get(i));
+            }
+
+            // Close stream output object
+            o.close();
+            f.close();
+        }catch(Exception FileNotFoundException){
+            System.out.println("File doesn't exist'");
+            try {
+                File file = new File("data.txt");
+                file.createNewFile();
+                System.out.println("Empty File Created:- " + file.length());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     static String userInputString(){
         Scanner input = new Scanner(System.in);     // Create a scanner object for user input
@@ -32,7 +76,7 @@ public class main {
     static void sortByDaysLeft(){}
 
 
-    /*
+    /***************************************
     * Creates a Todo object and populates it with data
     * Returns the Todo object
     */
@@ -59,29 +103,62 @@ public class main {
 
         return newTodo;
     }
+
+    /***************************************
+     * Deletes todo at a specified location
+     */
     static void removeTodo(ArrayList<Todo> TODO){
-        System.out.println("2");
+        //System.out.println("2");
         // Ask user what todo they would like to remove
+        int choice = userInputInt();
+        int index = choice - 1;
+
         // Confirm user choice
+        Scanner input = new Scanner(System.in);
+        System.out.println("Removing todo " + index);
+        System.out.println("Please confirm y or n");
+        String confirmation = input.nextLine();
+        if (confirmation.equals("y") || confirmation.equals("Y")){
+            TODO.remove(index);
+            System.out.println("Todo " + index + " has been removed");
+        }else{
+            System.out.println("Cancelling Todo removal");
+        }
+
         // Adjust user choice for index
         // Remove the todo from arraylist
     }
+
+    /***************************************
+     * Updates todo at a desired location
+     */
     static void updateTodo(ArrayList<Todo> TODO){
         System.out.println("3");
         // Ask user what todo they would like to update
-        // Adjust user choice for index
+        int choice = userInputInt();
+        int index = choice - 1;
+
         // Create new todo
+        Todo newTodo = createTodo();
+
         // Place new todo in the desired index
+        try {
+            TODO.set(index, newTodo);
+        }
+        catch (IndexOutOfBoundsException e){
+            System.out.println("Unable to update to the Todo ");
+        }
     }
-    /*
+
+    /***************************************
      * Prints todos with nice formatting
      */
     static void displayTodos(ArrayList<Todo> TODO){
         //System.out.println("4");
         for (int i = 0; i < TODO.size(); i++){
-            System.out.println("###");
-            System.out.println("#" + i + "#");
-            System.out.println("###");
+            System.out.println("#####");
+            System.out.println("# " + i + " #");
+            System.out.println("#####");
 
             // Getting the todo object
             TODO.get(i).print();
@@ -89,16 +166,26 @@ public class main {
     }
 
 
+
+    /*********************************************
+    /*********************************************
+    ******                                  ******
+    ******          MAIN FUNCTION           ******
+    ******                                  ******
+    **********************************************
+    *********************************************/
     public static void main(String[] args){
+        // Creating arraylist to store todo objects
+        ArrayList<Todo> TODO = new ArrayList<Todo>();
+
         // Read data from file
+        readFromFile(TODO);
 
         // Update all the daysLeft attributes for each todo
 
         System.out.println("");
         System.out.println("Welcome to the To Do list:");
 
-        // Creating arraylist to store todo objects
-        ArrayList<Todo> TODO = new ArrayList<Todo>();
 
         Scanner userInput = new Scanner(System.in);     // Create a scanner object for user input
 
@@ -138,7 +225,8 @@ public class main {
                     System.out.println("Please enter a valid choice");
             }
             // Sort the todos by the number of days left
-            // Save data to file
+           // Save data to file
+            writeToFile(TODO);
         }
 
     }
